@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import mpmath as mp
 
@@ -11,25 +12,18 @@ cl   = 2.99792458e10 #speed of light CGS
 #This function increases accuracy for calculation
 def DC(V):
     if type(V) is np.ndarray:
-        for i in range (len(V)):
-            V[i] = mp.mpf(V[i])
-        return V
+        return V.astype(np.float64)
     else:
-        V = [V]
-        V = np.asarray(V)
-        for i in range (len(V)):
-            V[i] = mp.mpf(V[i])
+        V = np.array([V]).astype(np.float64)
         return V
 
 
 #---------------------------------------------------------------------------------------------------------------    
 #range frequencies
-def set_frequencies(nu_min,nu_max,nfreq):  
-	nu = np.zeros(nfreq)
-	for ifreq in range(1, nfreq+1):
-	    nu[ifreq-1] = nu_min*(nu_max/nu_min)**(float(ifreq-1)/(nfreq-1))
-
-	return nu
+def set_frequencies(nu_min,nu_max,nfreq):
+    ifraq = np.linspace(0, nfreq, nfreq)  
+    nu = nu_min*(nu_max/nu_min)**(ifraq/nfreq)
+    return nu
 
 #Variables:
 
@@ -139,8 +133,8 @@ def freefree(de, pr, R, dR, Cells, I0, Z, nu, dist):
     #--------------------------------------------------------------------------------------------------------------- 
     #Flux
     def Flux(F1_ff, nu):
-	F = np.trapz(F1_ff, nu)
-	return F
+	    F = np.trapz(F1_ff, nu)
+	    return F
     #--------------------------------------------------------------------------------------------------------------- 
     
 #Apply modules

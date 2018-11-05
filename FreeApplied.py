@@ -66,7 +66,7 @@ R = Crc
 Z = Crc
 Z = np.insert(Z, 0, 0)
 
-print len(dR), len(Z)
+print(len(dR), len(Z))
 
 
 # In[4]:
@@ -86,7 +86,7 @@ for j in range(len(R)):
     
     #Mark evolution, not required
     Evo = float(j)/len(R)
-    print Evo*100
+    print(Evo*100)
     
     #iterates over Z
     I0 = np.zeros([len(Crc),nfreq])
@@ -96,12 +96,7 @@ for j in range(len(R)):
         
         #condition, so it doenst calculate outside the data
         if r > max(Crc):
-            #Zeros = np.zeros(nfreq)
-            I_ff = I_ff
-            F_ff = F_ff
-            tau_ff = tau_ff
-            nu = nu
-            F = F
+            continue
         else:
             theta = np.arcsin(Z[i+1]/r) #angle 
             #Cell size
@@ -117,10 +112,10 @@ for j in range(len(R)):
 
 #------------------------------------------------------------------------------------------------------------
 #Show if the for is finished and measure its time    
-print 'ok'
+print('ok')
 t2 = time.time()
 tt = t2-t1
-print tt, 'seconds'
+print(tt, 'seconds')
 #END OF THE CODE
 #------------------------------------------------------------------------------------------------------------
 
