@@ -80,41 +80,35 @@ print(len(dR), len(Z))
 t1 = time.time()
 
 
-
-#iterates over R
-for j in range(len(R)):
+#iterates over Z
+I0 = np.zeros([len(Crc),nfreq])
+stacked_results = np.zeros_like(I0)
+for i in range(len(Z)-1):
+    #r of the cell
+    r = np.sqrt(Z[i+1]**2+R**2)
     
-    #Mark evolution, not required
-    Evo = float(j)/len(R)
-    print(Evo*100)
-    
-    #iterates over Z
-    I0 = np.zeros([len(Crc),nfreq])
-    for i in range(len(Z)-1):
-        #r of the cell
-        r = np.sqrt(Z[i+1]**2+R[j]**2)
-        
-        #condition, so it doenst calculate outside the data
-        if r > max(Crc):
-            continue
-        else:
-            theta = np.arcsin(Z[i+1]/r) #angle 
-            #Cell size
-            Cell = (Z[i+1] - Z[i])*np.cos(theta)
-            
-            #Find the index for values of r in the data
-            g = np.where(Crc <= r)
-            g = g[0][-1]
-            
-            #FreeFree Function
-            I_ff, F_ff, F, tau_ff = freefree(Cde[g], Cpr[g], R[j], dR[j], Cell, I0[i-1], Zn, nu, dist)
-            I0[i] = I_ff 
+    #condition, so it doenst calculate outside the data
+    theta = np.arcsin(Z[i+1]/r) #angle 
+    #Cell size
+    Cell = (Z[i+1] - Z[i])*np.cos(theta)
 
+    
+    #Find the index for values of r in the data
+    g = np.where(Crc <= r)
+    g = g[0][-1]
+    
+    #FreeFree Function
+    nu = nu.reshape([2, 1])
+
+    I_ff, F_ff, F, tau_ff = freefree(Cde, Cpr, R, dR, Cell, I0[i-1].reshape([2, 1]), Zn, nu, dist)
+    I0 = I_ff.reshape([I0.shape[0], I0.shape[1]])
+    stacked_results = np.dstack((stacked_results, I0))
 #------------------------------------------------------------------------------------------------------------
 #Show if the for is finished and measure its time    
 print('ok')
 t2 = time.time()
 tt = t2-t1
+print(stacked_results.shape)
 print(tt, 'seconds')
 #END OF THE CODE
 #------------------------------------------------------------------------------------------------------------
